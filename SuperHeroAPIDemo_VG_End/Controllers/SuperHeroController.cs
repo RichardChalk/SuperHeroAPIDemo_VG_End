@@ -31,11 +31,25 @@ namespace SuperHeroAPIDemo_G.Controllers
                 Name = "Ironman", FirstName = "Tony", SurName="Stark",
                 City="New York"},
         };
-        
+
         // READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL //
         // READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL //
         // READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL //
         // READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL //
+
+        // READ ALL ///////////////////////////////////////////////////////
+        /// <summary>
+        /// Retrieve ALL Superheroes from the database
+        /// </summary>
+        /// <returns>
+        /// A full list of ALL Superheroes
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /api/SuperHero
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a full list of ALL Superheroes
+        /// </response>
         [HttpGet]
         //[HttpGet("GetAll")]
         public async Task<ActionResult<List<SuperHero>>> GetAll()
@@ -49,13 +63,29 @@ namespace SuperHeroAPIDemo_G.Controllers
         // READ ONE - READ ONE - READ ONE - READ ONE - READ ONE - READ ONE - READ ONE - READ ONE //
         // READ ONE - READ ONE - READ ONE - READ ONE - READ ONE - READ ONE - READ ONE - READ ONE //
         // READ ONE - READ ONE - READ ONE - READ ONE - READ ONE - READ ONE - READ ONE - READ ONE //
+
+        /// <summary>
+        /// Retrieve a SPECIFIC Superhero from the database
+        /// </summary>
+        /// <param name="id">
+        /// Id of specific Superhero
+        /// </param>
+        /// <returns>
+        /// The chosen Superhero (by Id)
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /api/SuperHero/1
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned the chosen SuperHero (by Id)
+        /// </response>
         [HttpGet]
         [Route("{id}")]
         //[Route("GetOne/{id:int}")]
         public async Task<ActionResult<SuperHero>> GetOne(int id)
         {
             //var hero = heroes.Find(s => s.Id == id);
-            var hero = _dbContext.SuperHeroes.Find(id);
+            var hero = await _dbContext.SuperHeroes.FindAsync(id);
 
             if (hero == null)
             {
