@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ namespace SuperHeroAPIDemo_G.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowAll")]
     public class SuperHeroController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
@@ -16,8 +18,6 @@ namespace SuperHeroAPIDemo_G.Controllers
         {
             _dbContext = dbContext;
         }
-        
-        
         
         private static List<SuperHero> heroes = new List<SuperHero>
         {
