@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SuperHeroAPIDemo_G.Data;
 using SuperHeroAPIDemo_G.Models;
+using System.Data;
 
 namespace SuperHeroAPIDemo_G.Controllers
 {
@@ -19,19 +21,6 @@ namespace SuperHeroAPIDemo_G.Controllers
             _dbContext = dbContext;
         }
         
-        private static List<SuperHero> heroes = new List<SuperHero>
-        {
-            new SuperHero
-            {
-                Id = 1, Name = "Spiderman", FirstName = "Peter",
-                SurName="Parker", City="New York"},
-            new SuperHero
-            {
-                Id = 2,
-                Name = "Ironman", FirstName = "Tony", SurName="Stark",
-                City="New York"},
-        };
-
         // READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL //
         // READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL //
         // READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL -  READ ALL //
@@ -51,7 +40,7 @@ namespace SuperHeroAPIDemo_G.Controllers
         /// Successfully returned a full list of ALL Superheroes
         /// </response>
         [HttpGet]
-        //[HttpGet("GetAll")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<List<SuperHero>>> GetAll()
         {
             //return Ok(heroes);
@@ -81,7 +70,7 @@ namespace SuperHeroAPIDemo_G.Controllers
         /// </response>
         [HttpGet]
         [Route("{id}")]
-        //[Route("GetOne/{id:int}")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<SuperHero>> GetOne(int id)
         {
             //var hero = heroes.Find(s => s.Id == id);
@@ -99,6 +88,7 @@ namespace SuperHeroAPIDemo_G.Controllers
         // POST - POST - POST - POST - POST - POST - POST - POST - POST - POST - POST - POST - POST //
         // POST - POST - POST - POST - POST - POST - POST - POST - POST - POST - POST - POST - POST //
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<SuperHero>> PostHero(SuperHero hero)
         {
             //heroes.Add(hero);
@@ -112,6 +102,7 @@ namespace SuperHeroAPIDemo_G.Controllers
         // PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT //
         // PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT - PUT //
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<SuperHero>> UpdateHero(SuperHero hero)
         {
             // OBS: PUT Uppdaterar HELA SuperHero (ALLA properties)
@@ -138,6 +129,7 @@ namespace SuperHeroAPIDemo_G.Controllers
         // DELETE - DELETE - DELETE - DELETE - DELETE - DELETE - DELETE - DELETE - DELETE //
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<SuperHero>> Delete(int id)
         {
             var hero = await _dbContext.SuperHeroes.FindAsync(id);
@@ -158,6 +150,7 @@ namespace SuperHeroAPIDemo_G.Controllers
         // PATCH - PATCH - PATCH - PATCH - PATCH - PATCH - PATCH - PATCH - PATCH - PATCH //
         [HttpPatch]
         [Route("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<SuperHero>> PatchHero(JsonPatchDocument hero, int id)
         {
             // OBS: PUT Uppdaterar SuperHero (VISSA properties)
